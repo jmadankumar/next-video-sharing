@@ -8,6 +8,7 @@ import cx from 'classnames';
 import PlayerTimer from './PlayerTimer';
 import VolumeController from './VolumeController';
 import { IconButton } from '@material-ui/core';
+import ReplayIcon from '@material-ui/icons/Replay';
 
 const controlHeight = 36;
 const PlayerControlsWrapper = styled.div`
@@ -45,7 +46,7 @@ const PlayerControlsWrapper = styled.div`
   }
 `;
 
-interface PlayerControlsProps extends React.HTMLAttributes<HTMLDivElement> {
+interface PlayerControlsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onVolumeChange'> {
   position?: 'bottom';
   onPause?: () => void;
   onPlay?: () => void;
@@ -55,6 +56,13 @@ interface PlayerControlsProps extends React.HTMLAttributes<HTMLDivElement> {
   currentTime?: number;
   duration?: number;
   fullScreen?: boolean;
+  onMute?: () => void;
+  onUnmute?: () => void;
+  onVolumeChange?: (volume: number) => void;
+  muted?: boolean;
+  volume?: number;
+  ended?: boolean;
+  onReplay?: () => void;
 }
 
 const PlayerControls: React.FC<PlayerControlsProps> = ({
@@ -68,8 +76,22 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
   duration = 0,
   fullScreen,
   className,
+  onMute,
+  onUnmute,
+  onVolumeChange,
+  muted,
+  volume,
+  ended,
+  onReplay,
   ...props
 }) => {
+  const renderPlayButton = () => {
+    return (
+      <IconButton className="control" onClick={paused ? onPlay : onPause}>
+        {paused ? <PlayArrowIcon /> : <PauseIcon />}
+      </IconButton>
+    );
+  };
   return (
     <PlayerControlsWrapper
       {...props}
@@ -82,11 +104,20 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
     >
       <div className="controls-container">
         <div className="control-group">
-          <IconButton className="control" onClick={paused ? onPlay : onPause}>
-            {paused ? <PlayArrowIcon /> : <PauseIcon />}
-          </IconButton>
-
-          <VolumeController controlClassName="control" />
+          {ended && (
+            <IconButton className="control" onClick={onReplay}>
+              <ReplayIcon />
+            </IconButton>
+          )}
+          {!ended && renderPlayButton()}
+          <VolumeController
+            controlClassName="control"
+            onMute={onMute}
+            onUnmute={onUnmute}
+            onVolumeChange={onVolumeChange}
+            muted={muted}
+            volume={volume}
+          />
           <PlayerTimer
             className="control player-timer"
             currenTime={currentTime}

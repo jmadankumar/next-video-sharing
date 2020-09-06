@@ -4,6 +4,22 @@ import VolumeMuteIcon from '@material-ui/icons/VolumeMute';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import { IconButton } from '@material-ui/core';
+import Slider from '../Slider/Slider';
+import styled from 'styled-components';
+
+const VolumeControllerWrapper = styled.div`
+  .volume-slide-container {
+    display: none;
+    width: 60px;
+    height: 5px;
+  }
+  &:hover .volume-slide-container {
+    display: inline-block;
+    padding-right: 12px;
+  }
+`;
+
+const MAX_VOLUME = 1.0;
 
 interface VolumeControllerProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onVolumeChange'> {
@@ -41,13 +57,18 @@ const VolumeController: React.FC<VolumeControllerProps> = ({
     }
   };
 
+  const handleSliderChange = (value: number) => {
+    onVolumeChange?.((MAX_VOLUME * value) / 100);
+  };
   return (
-    <div>
+    <VolumeControllerWrapper className="volume-controller">
       <IconButton className={controlClassName} onClick={handleVolumeToggle}>
         {renderVolumeIcon()}
       </IconButton>
-      <div></div>
-    </div>
+      <div className="volume-slide-container">
+        <Slider max={MAX_VOLUME} value={volume} onChange={handleSliderChange} color={'#fff'} />
+      </div>
+    </VolumeControllerWrapper>
   );
 };
 
