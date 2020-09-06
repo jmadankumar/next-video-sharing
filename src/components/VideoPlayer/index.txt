@@ -1,0 +1,110 @@
+import React, { useRef, useEffect } from 'react';
+
+interface VideoPlayerProps{
+  
+}
+const VideoPlayer:React.FC<VideoPlayerProps> = () => {
+  const ref = useRef<HTMLVideoElement>(null);
+
+  const listenVideoEvents = (video: HTMLVideoElement) => {
+    let offlineAudioCtx = new OfflineAudioContext({
+      numberOfChannels: 1,
+      sampleRate: 3000,
+      length: 10,
+    });
+    video.addEventListener('canplay', () => {
+      console.log('can play');
+    });
+    video.addEventListener('canplaythrough', () => {
+      console.log('can play through');
+    });
+    offlineAudioCtx.addEventListener('complete', () => {
+      console.log('complete');
+    });
+    video.addEventListener('durationchange', (event) => {
+      console.log(ref.current?.duration);
+    });
+    video.addEventListener('emptied', () => {
+      console.log('emptied');
+    });
+    video.addEventListener('ended', () => {
+      console.log('ended');
+    });
+    video.addEventListener('loadeddata', () => {
+      console.log('loaded data => frames at current playback postion is loaded');
+    });
+    video.addEventListener('loadedmetadata', (event) => {
+      console.log(
+        'loaded meta data',
+        video.duration,
+        video.videoWidth,
+        video.videoHeight,
+        video.currentTime,
+      );
+    });
+    video.addEventListener('pause', () => {
+      console.log('paused');
+    });
+    video.addEventListener('play', () => {
+      console.log('play');
+    });
+    video.addEventListener('playing', () => {
+      console.log('playing');
+    });
+    video.addEventListener('progress', () => {
+      console.log('progress');
+    });
+    video.addEventListener('ratechange', () => {
+      console.log('rate change');
+    });
+    video.addEventListener('seeked', () => {
+      console.log('seeked', video.currentTime);
+    });
+    video.addEventListener('seeking', () => {
+      console.log('seeking', video.currentTime);
+    });
+    video.addEventListener('stalled', () => {
+      console.log('stalled:Failed to fetch data, but trying.');
+    });
+    video.addEventListener('suspend', () => {
+      console.log('suspended: Media data loading has been suspended.');
+    });
+    video.addEventListener('timeupdate', () => {
+      //   console.log('time update', video.currentTime);
+    });
+    video.addEventListener('volumechange', () => {
+      console.log('volume change', video.volume);
+    });
+    video.addEventListener('waiting', () => {
+      console.log('waiting');
+    });
+  };
+  useEffect(() => {
+    if (ref?.current) {
+      listenVideoEvents(ref.current);
+    }
+    return () => {};
+  }, []);
+
+  const load = () => {
+    if (ref.current) {
+      ref.current.load();
+    }
+  };
+  return (
+    <div>
+      <video
+        src="https://www.radiantmediaplayer.com/media/big-buck-bunny-360p.mp4"
+        // autoPlay
+        controls
+        ref={ref}
+        // currentTime={0.2}
+        poster="https://i.picsum.photos/id/628/200/200.jpg?hmac=iI5Sx7kEQEboYw_QKjCo-GsB_EyIcdl7LYnW-EbgEqg"
+        // preload=""
+      />
+      <button onClick={load}>Load</button>
+    </div>
+  );
+};
+
+export default VideoPlayer;
