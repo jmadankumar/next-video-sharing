@@ -1,7 +1,6 @@
-import React, { CSSProperties, useRef } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { Slide } from '@material-ui/core';
-import Slider from '../Slider/Slider';
+import Slider from '../Slider';
 
 const VideoProgressBarWrapper = styled.div`
   position: absolute;

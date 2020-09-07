@@ -4,7 +4,7 @@ import VolumeMuteIcon from '@material-ui/icons/VolumeMute';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import { IconButton } from '@material-ui/core';
-import Slider from '../Slider/Slider';
+import Slider from '../Slider';
 import styled from 'styled-components';
 
 const VolumeControllerWrapper = styled.div`
@@ -71,7 +71,7 @@ const VolumeController: React.FC<VolumeControllerProps> = ({
         {renderVolumeIcon()}
       </IconButton>
       <div className="volume-slide-container">
-        <Slider max={MAX_VOLUME} value={volume} onChange={handleSliderChange} color={'#fff'} />
+        <Slider max={MAX_VOLUME} value={volume} onChange={handleSliderChange} color={'#fff'} trackHeight={4}/>
       </div>
     </VolumeControllerWrapper>
   );

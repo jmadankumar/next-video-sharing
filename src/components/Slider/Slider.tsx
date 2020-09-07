@@ -3,60 +3,23 @@ import styled from 'styled-components';
 import cx from 'classnames';
 import hexToRgba from 'hex-to-rgba';
 
-const sliderHeight = 6;
-const sliderThumbWidth = 14;
-const SliderWrapper = styled.div`
-  width: 100%;
-  height: auto;
-  padding: 0 ${sliderThumbWidth / 2}px;
-  overflow: hidden;
-  cursor: pointer;
-  height: ${sliderThumbWidth}px;
-  .slider-container {
-    width: calc(100% - ${sliderThumbWidth}px);
-    position: relative;
-    height: ${sliderThumbWidth}px;
-  }
-  .slider-rail {
-    width: 100%;
-    background-color: rgb(238, 238, 238, 0.3);
-    height: ${sliderHeight}px;
-    position: absolute;
-    top: ${sliderThumbWidth / 2 - sliderHeight / 2}px;
-    left: 0;
-    right: 0;
-  }
-  .slider-track {
-    width: 0%;
-    background-color: blue;
-    height: ${sliderHeight}px;
-    position: absolute;
-    top: ${sliderThumbWidth / 2 - sliderHeight / 2}px;
-    left: 0;
-    right: 0;
-  }
-  .slider-thumb {
-    position: absolute;
-    background-color: blue;
-    top: 0;
-    width: ${sliderThumbWidth}px;
-    height: ${sliderThumbWidth}px;
-    cursor: pointer;
-    border-radius: 50%;
-    user-select: none;
-  }
-  .slider-thumb.active {
-    border: 6px solid green;
-  }
-`;
 interface SliderProps {
   max: number;
   value: number;
   onChange: (value: number) => void;
   color?: string;
+  thumbSize?: number;
+  trackHeight?: number;
 }
 
-const Slider: React.FC<SliderProps> = ({ max, value, onChange, color = '#000000' }) => {
+const Slider: React.FC<SliderProps> = ({
+  max,
+  value,
+  onChange,
+  color = '#000000',
+  thumbSize = 14,
+  trackHeight = 6,
+}) => {
   const progressValue = value / max;
   const progressInPercentage = progressValue * 100;
   const sliderRailRef = useRef<HTMLDivElement>(null);
@@ -103,7 +66,7 @@ const Slider: React.FC<SliderProps> = ({ max, value, onChange, color = '#000000'
     return {
       left: `${left}px`,
       backgroundColor: hexToRgba(color),
-      transform: `translateX(-${sliderThumbWidth / 2}px)`,
+      transform: `translateX(-${thumbSize / 2}px)`,
     };
   };
   const handleMouseMove = (event: MouseEvent) => {
@@ -134,17 +97,64 @@ const Slider: React.FC<SliderProps> = ({ max, value, onChange, color = '#000000'
   };
 
   return (
-    <SliderWrapper className="slider-root">
-      <div className="slider-container" onClick={handleSliderClick}>
-        <div className="slider-rail" ref={sliderRailRef} />
-        <div className="slider-track" style={getSliderTrackStyle()} />
+    <div
+      className="slider-root"
+      style={{
+        width: '100%',
+        padding: `0 ${thumbSize / 2}px`,
+        overflow: 'hidden',
+        cursor: 'pointer',
+        height: `${thumbSize}px`,
+      }}
+    >
+      <div
+        className="slider-container"
+        onClick={handleSliderClick}
+        style={{
+          width: `calc(100% - ${thumbSize}px)`,
+          position: 'relative',
+          height: ` ${thumbSize}px`,
+        }}
+      >
         <div
-          style={getSliderThumbStyle()}
+          className="slider-rail"
+          ref={sliderRailRef}
+          style={{
+            width: '100%',
+            backgroundColor: 'rgb(238, 238, 238, 0.3)',
+            height: `${trackHeight}px`,
+            position: 'absolute',
+            top: `${thumbSize / 2 - trackHeight / 2}px`,
+            left: '0',
+            right: '0',
+          }}
+        />
+        <div
+          className="slider-track"
+          style={{
+            height: `${trackHeight}px`,
+            position: 'absolute',
+            top: `${thumbSize / 2 - trackHeight / 2}px`,
+            left: '0',
+            right: '0',
+            ...getSliderTrackStyle(),
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            width: `${thumbSize}px`,
+            height: ` ${thumbSize}px`,
+            cursor: 'pointer',
+            borderRadius: '50%',
+            ...getSliderThumbStyle(),
+          }}
           className={cx('slider-thumb')}
           onMouseDown={handleMouseDown}
         />
       </div>
-    </SliderWrapper>
+    </div>
   );
 };
 
