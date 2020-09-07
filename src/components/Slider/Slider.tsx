@@ -7,14 +7,22 @@ const sliderHeight = 6;
 const sliderThumbWidth = 14;
 const SliderWrapper = styled.div`
   width: 100%;
-  position: relative;
+  height: auto;
+  padding: 0 ${sliderThumbWidth / 2}px;
+  overflow: hidden;
   cursor: pointer;
+  height: ${sliderThumbWidth}px;
+  .slider-container {
+    width: calc(100% - ${sliderThumbWidth}px);
+    position: relative;
+    height: ${sliderThumbWidth}px;
+  }
   .slider-rail {
     width: 100%;
     background-color: rgb(238, 238, 238, 0.3);
     height: ${sliderHeight}px;
     position: absolute;
-    top: 0;
+    top: ${sliderThumbWidth / 2 - sliderHeight / 2}px;
     left: 0;
     right: 0;
   }
@@ -23,14 +31,14 @@ const SliderWrapper = styled.div`
     background-color: blue;
     height: ${sliderHeight}px;
     position: absolute;
-    top: 0;
+    top: ${sliderThumbWidth / 2 - sliderHeight / 2}px;
     left: 0;
     right: 0;
   }
   .slider-thumb {
     position: absolute;
     background-color: blue;
-    top: -4px;
+    top: 0;
     width: ${sliderThumbWidth}px;
     height: ${sliderThumbWidth}px;
     cursor: pointer;
@@ -49,39 +57,61 @@ interface SliderProps {
 }
 
 const Slider: React.FC<SliderProps> = ({ max, value, onChange, color = '#000000' }) => {
-  const trackWidthInPercentage = (value / max) * 100;
+  const progressValue = value / max;
+  const progressInPercentage = progressValue * 100;
   const sliderRailRef = useRef<HTMLDivElement>(null);
 
+  const getSliderCoordinates = () => {
+    const sliderRail = sliderRailRef.current;
+    let x = 0;
+    let width = 0;
+    if (sliderRail) {
+      const box = sliderRail.getBoundingClientRect();
+      const { left } = box;
+      x = left;
+      width = sliderRail.clientWidth;
+    }
+    return {
+      x,
+      width,
+    };
+  };
+
+  const getSliderThumbXpos = (thumbXPos: number) => {
+    const { x, width } = getSliderCoordinates();
+    let newThumbXPos = thumbXPos - x;
+    if (newThumbXPos <= 0) {
+      newThumbXPos = 0;
+    } else if (newThumbXPos >= width) {
+      newThumbXPos = width;
+    }
+    return newThumbXPos;
+  };
+
+  const valueToPercent = (sliderThumbXPos: number) => {
+    const { width } = getSliderCoordinates();
+    return (sliderThumbXPos / width) * 100;
+  };
+
   const getSliderTrackStyle = () => {
-    return { width: `${trackWidthInPercentage}%`, backgroundColor: hexToRgba(color) };
+    return { width: `${progressInPercentage}%`, backgroundColor: hexToRgba(color) };
   };
 
   const getSliderThumbStyle = () => {
-    return { left: `${trackWidthInPercentage}%`, backgroundColor: hexToRgba(color) };
+    const { width } = getSliderCoordinates();
+    let left = progressValue * width;
+    return {
+      left: `${left}px`,
+      backgroundColor: hexToRgba(color),
+      transform: `translateX(-${sliderThumbWidth / 2}px)`,
+    };
   };
   const handleMouseMove = (event: MouseEvent) => {
     const index = sliderRailRef.current?.getAttribute('data-index') === 'true';
-    const posX = event.clientX;
-    const sliderRail = sliderRailRef.current;
-
-    if (sliderRail && index) {
-      const box = sliderRail.getBoundingClientRect();
-      const { clientWidth } = sliderRail as HTMLElement;
-
-      if (box) {
-        const { left } = box;
-        let thumbLeft = 0;
-        if (posX <= left) {
-          thumbLeft = 0;
-        } else if (posX >= clientWidth + left) {
-          thumbLeft = clientWidth + left - sliderThumbWidth;
-        } else {
-          thumbLeft = posX - sliderThumbWidth / 2;
-        }
-        const value = (thumbLeft / (clientWidth + left)) * 100;
-        console.log(value);
-        onChange(value);
-      }
+    if (index) {
+      const sliderThumbXPos = getSliderThumbXpos(event.clientX);
+      const percent = valueToPercent(sliderThumbXPos);
+      onChange(percent);
     }
   };
 
@@ -98,23 +128,22 @@ const Slider: React.FC<SliderProps> = ({ max, value, onChange, color = '#000000'
   };
 
   const handleSliderClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const box = (event.target as HTMLElement).getBoundingClientRect();
-    const { left } = box;
-    const sliderRail = sliderRailRef.current;
-    const { clientWidth } = sliderRail as HTMLElement;
-    const value = Math.round(((event.clientX - sliderThumbWidth) / (clientWidth + left)) * 100);
-    onChange(value);
+    const sliderThumbXPos = getSliderThumbXpos(event.clientX);
+    const percent = valueToPercent(sliderThumbXPos);
+    onChange(percent);
   };
 
   return (
-    <SliderWrapper className="slider-root" onClick={handleSliderClick}>
-      <div className="slider-rail" ref={sliderRailRef}></div>
-      <div className="slider-track" style={getSliderTrackStyle()}></div>
-      <div
-        style={getSliderThumbStyle()}
-        className={cx('slider-thumb')}
-        onMouseDown={handleMouseDown}
-      ></div>
+    <SliderWrapper className="slider-root">
+      <div className="slider-container" onClick={handleSliderClick}>
+        <div className="slider-rail" ref={sliderRailRef} />
+        <div className="slider-track" style={getSliderTrackStyle()} />
+        <div
+          style={getSliderThumbStyle()}
+          className={cx('slider-thumb')}
+          onMouseDown={handleMouseDown}
+        />
+      </div>
     </SliderWrapper>
   );
 };

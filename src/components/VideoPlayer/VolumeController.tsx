@@ -8,10 +8,12 @@ import Slider from '../Slider/Slider';
 import styled from 'styled-components';
 
 const VolumeControllerWrapper = styled.div`
+  display: flex;
+  align-items: center;
   .volume-slide-container {
     display: none;
     width: 60px;
-    height: 5px;
+    height: 14px;
   }
   &:hover .volume-slide-container {
     display: inline-block;
@@ -39,6 +41,7 @@ const VolumeController: React.FC<VolumeControllerProps> = ({
   onUnmute,
   onVolumeChange,
 }) => {
+  
   const renderVolumeIcon = () => {
     if (muted) {
       return <VolumeOffIcon />;
@@ -49,6 +52,7 @@ const VolumeController: React.FC<VolumeControllerProps> = ({
     }
     return <VolumeUpIcon />;
   };
+
   const handleVolumeToggle = () => {
     if (muted) {
       onUnmute?.();
@@ -60,6 +64,7 @@ const VolumeController: React.FC<VolumeControllerProps> = ({
   const handleSliderChange = (value: number) => {
     onVolumeChange?.((MAX_VOLUME * value) / 100);
   };
+
   return (
     <VolumeControllerWrapper className="volume-controller">
       <IconButton className={controlClassName} onClick={handleVolumeToggle}>
