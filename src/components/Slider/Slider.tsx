@@ -69,12 +69,17 @@ const Slider: React.FC<SliderProps> = ({
       transform: `translateX(-${thumbSize / 2}px)`,
     };
   };
+
+  const handleThumbPos = (clientX: number) => {
+    const sliderThumbXPos = getSliderThumbXpos(clientX);
+    const percent = valueToPercent(sliderThumbXPos);
+    onChange(percent);
+  };
+
   const handleMouseMove = (event: MouseEvent) => {
     const index = sliderRailRef.current?.getAttribute('data-index') === 'true';
     if (index) {
-      const sliderThumbXPos = getSliderThumbXpos(event.clientX);
-      const percent = valueToPercent(sliderThumbXPos);
-      onChange(percent);
+      handleThumbPos(event.clientX);
     }
   };
 
@@ -91,9 +96,7 @@ const Slider: React.FC<SliderProps> = ({
   };
 
   const handleSliderClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const sliderThumbXPos = getSliderThumbXpos(event.clientX);
-    const percent = valueToPercent(sliderThumbXPos);
-    onChange(percent);
+    handleThumbPos(event.clientX);
   };
 
   return (

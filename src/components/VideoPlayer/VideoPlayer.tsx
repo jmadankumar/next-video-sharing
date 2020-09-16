@@ -103,7 +103,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ ...props }) => {
     }
   };
 
-  const handleReplay = ()=>{
+  const handleReplay = () => {
     if (ref?.current) {
       ref.current.currentTime = 0;
       setCurrentTime(0);
@@ -111,7 +111,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ ...props }) => {
       setPaused(false);
       ref.current.play();
     }
-  }
+  };
 
   return (
     <VideoPlayerWrapper className="video-container" ref={containerRef}>
@@ -122,6 +122,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ ...props }) => {
         onEnded={handleEnded}
         onTimeUpdate={handleTimeUpdate}
         onDurationChange={handleDurationChange}
+        onClick={paused ? handlePlay : handlePause}
       />
       <VideoProgressBar
         currentTime={currentTime}
