@@ -28,3 +28,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+Reference:
+SSR Stylesheet: https://medium.com/swlh/server-side-rendering-styled-components-with-nextjs-1db1353e915e#:~:text=Styled%2Dcomponents%20supports%20concurrent%20SSR,styles%20via%20a%20context%20API.

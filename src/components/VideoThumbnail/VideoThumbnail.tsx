@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const VideoThumbnailWrapper = styled.div`
-  width: 160px;
-  height: 90px;
+  width: 100%;
   img {
     width: 100%;
     height: auto;

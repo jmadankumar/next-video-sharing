@@ -1,9 +1,8 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import VideoCard from '../components/VideoCard';
-import VideoThumbnail from '../components/VideoThumbnail';
 import VideoService from '../service/video.service';
-import styles from '../styles/Home.module.css';
 import { VideoDTO } from '../types/video';
 
 interface HomeProps {
@@ -12,14 +11,16 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ videos }) => {
   console.log(videos);
   return (
-    <div className="p-5 mt-16">
+    <div>
       <Head>
         <title>Next Video Sharing</title>
       </Head>
-      <div className="flex -mx-4">
+      <div className="flex flex-wrap -mx-2">
         {videos.map((video) => (
-          <div className="w-1/4 px-2">
-            <VideoCard videoDetail={video} />
+          <div className="xs:w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/4 px-3" key={video.id}>
+            <Link href={`/watch?v=${video.id}`}>
+              <VideoCard videoDetail={video} className="cursor-pointer mb-8" />
+            </Link>
           </div>
         ))}
       </div>
