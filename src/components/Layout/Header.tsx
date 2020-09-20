@@ -1,4 +1,4 @@
-import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Button, Drawer, Toolbar, Typography } from '@material-ui/core';
 import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
@@ -12,11 +12,11 @@ interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = ({}) => {
   return (
-    <HeaderWrapper position="fixed">
-      <Toolbar className="bg-white">
+    <HeaderWrapper position="fixed" elevation={0} className="border-b border-gray-300">
+      <Toolbar className="bg-white" >
         <div className="flex flex-between flex-grow">
           <Link href="/">
-            <Typography variant="h5" className="text-black">
+            <Typography variant="h5" className="text-black cursor-pointer">
               Next Video
             </Typography>
           </Link>
@@ -28,6 +28,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
           <Button color="primary">Login</Button>
         </Link>
       </Toolbar>
+      <Drawer ModalProps></Drawer>
     </HeaderWrapper>
   );
 };

@@ -32,10 +32,17 @@ const SideBarWrapper = styled(Drawer)`
     width: 240px;
   }
 `;
-const SideBar = () => {
+interface SideBarProps {
+  floatSideBar?: boolean;
+}
+const SideBar: React.FC<SideBarProps> = ({ floatSideBar }) => {
   const router = useRouter();
   return (
-    <SideBarWrapper variant="permanent" className="" classes={{ paper: 'sidebar-paper' }}>
+    <SideBarWrapper
+      variant={floatSideBar ? 'temporary' : 'permanent'}
+      className=""
+      classes={{ paper: 'sidebar-paper' }}
+    >
       <Toolbar />
       <List>
         {menuList.map(({ title, icon: Icon, path }) => {
