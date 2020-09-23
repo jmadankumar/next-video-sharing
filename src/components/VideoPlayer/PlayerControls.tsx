@@ -126,11 +126,7 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
         </div>
         <div className="control-group">
           <IconButton className="control" onClick={fullScreen ? onExitFullScreen : onFullScreen}>
-            {fullScreen ? (
-              <FullscreenExitIcon className="control" />
-            ) : (
-              <FullscreenIcon className="control" />
-            )}
+            {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
           </IconButton>
         </div>
       </div>

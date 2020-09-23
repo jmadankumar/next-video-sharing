@@ -8,6 +8,9 @@ import Layout from '../components/Layout';
 import Header from '../components/Layout/Header';
 import SideBar from '../components/SiderBar';
 import Main from '../components/Layout/Main';
+import { RootState, wrapperRedux } from '../store';
+import { setVideos } from '../store/home/actions';
+import { connect } from 'react-redux';
 
 interface HomeProps {
   videos: VideoDTO[];
@@ -36,11 +39,17 @@ const Home: React.FC<HomeProps> = ({ videos }) => {
   );
 };
 
-export default Home;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const videos = await VideoService.getAllVideo();
+function mapStateToProps(state: RootState) {
   return {
-    props: { videos },
+    videos: state.homeState.videos,
   };
-};
+}
+
+export default connect(mapStateToProps)(Home);
+
+export const getServerSideProps: GetServerSideProps = wrapperRedux.getServerSideProps(
+  async ({ store }) => {
+    const videos = await VideoService.getAllVideo();
+    await store.dispatch(setVideos(videos));
+  },
+);
