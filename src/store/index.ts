@@ -5,10 +5,12 @@ import authReducer from './auth/reducers';
 import homeReducer from './home/reducers';
 import { HomeActionTypes } from './home/types';
 import { AuthActionTypes } from './auth/types';
+import watchReducer from './watch/reducers';
 
 const combinedReducer = combineReducers({
   authState: authReducer,
   homeState: homeReducer,
+  watchState: watchReducer,
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;

@@ -1,12 +1,18 @@
 import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import { connect } from 'react-redux';
 import MainLayout from '../components/MainLayout';
-import VideoPlayer from '../components/VideoPlayer/VideoPlayer';
 import VideoService from '../service/video.service';
+import { RootState, wrapperRedux } from '../store';
+import { setWatchVideo } from '../store/watch/actions';
 import { VideoDTO } from '../types/video';
 
+const DynamicVideoPlayer = dynamic(() => import('../components/VideoPlayer/VideoPlayer'), {
+  ssr: false,
+});
 interface WatchPageProps {
-  video: VideoDTO;
+  video: VideoDTO | null;
 }
 
 const WatchPage: React.FC<WatchPageProps> = ({ video }) => {
@@ -17,7 +23,7 @@ const WatchPage: React.FC<WatchPageProps> = ({ video }) => {
       </Head>
       <div className="flex">
         <div className="xs:w-full sm:w-full md:w-full lg:w-8/12">
-          <VideoPlayer src={video.videoUrl} poster={video.thumbnailUrl} />
+          {video && <DynamicVideoPlayer src={video.videoUrl} poster={video.thumbnailUrl} />}
         </div>
         <div></div>
       </div>
@@ -25,12 +31,18 @@ const WatchPage: React.FC<WatchPageProps> = ({ video }) => {
   );
 };
 
-export default WatchPage;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { v: id } = context.query;
-  const video = await VideoService.getVideoById(id as string);
+const mapStateToProps = (state: RootState) => {
   return {
-    props: { video },
+    video: state.watchState.video,
   };
 };
+
+export default connect(mapStateToProps)(WatchPage);
+
+export const getServerSideProps: GetServerSideProps = wrapperRedux.getServerSideProps(
+  async ({ query, store }) => {
+    const { v: id } = query;
+    const video = await VideoService.getVideoById(id as string);
+    await store.dispatch(setWatchVideo(video));
+  },
+);
