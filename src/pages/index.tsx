@@ -29,8 +29,10 @@ const Home: React.FC<HomeProps> = ({ videos, ...props }) => {
         <div className="flex flex-wrap -mx-2">
           {videos.map((video) => (
             <div className="xs:w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/4 px-3" key={video.id}>
-              <Link href={`/watch?v=${video.id}`}>
-                <VideoCard videoDetail={video} className="cursor-pointer mb-8" />
+              <Link href={`/watch?v=${video.id}`} passHref>
+                <a>
+                  <VideoCard videoDetail={video} className="cursor-pointer mb-8" />
+                </a>
               </Link>
             </div>
           ))}

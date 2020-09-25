@@ -1,5 +1,13 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar } from '@material-ui/core';
+import {
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+} from '@material-ui/core';
 import styled from 'styled-components';
 import HomeIcon from '@material-ui/icons/Home';
 import WhatshotIcon from '@material-ui/icons/Whatshot';
@@ -7,6 +15,7 @@ import SubscriptionsIcon from '@material-ui/icons/Subscriptions';
 import { useRouter } from 'next/dist/client/router';
 import cx from 'classnames';
 import Link from 'next/link';
+import ChannelSubscriptions from '../ChannelSubscriptions';
 
 const menuList: Array<{ title: string; path: string; icon: any }> = [
   {
@@ -48,8 +57,8 @@ const SideBar: React.FC<SideBarProps> = ({ floatSideBar }) => {
         {menuList.map(({ title, icon: Icon, path }) => {
           const active = router.pathname === path;
           return (
-            <Link href={path} key={path}>
-              <ListItem selected={active} button>
+            <Link href={path} key={path} passHref>
+              <ListItem selected={active} button component="a">
                 <ListItemIcon>
                   <Icon className={cx({ 'text-green-500': active })} />
                 </ListItemIcon>
@@ -58,7 +67,9 @@ const SideBar: React.FC<SideBarProps> = ({ floatSideBar }) => {
             </Link>
           );
         })}
+        <Divider />
       </List>
+      <ChannelSubscriptions />
     </SideBarWrapper>
   );
 };

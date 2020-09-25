@@ -1,11 +1,19 @@
 import React from 'react';
-import { Button, Card, CardContent, Snackbar, TextField, Typography } from '@material-ui/core';
+import {
+  Button,
+  Card,
+  CardContent,
+  Snackbar,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import { useState } from 'react';
 import styled from 'styled-components';
 import AuthService from '../service/auth.service';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -93,10 +101,16 @@ const LoginPage = () => {
                 color="primary"
                 size="large"
                 disableElevation
-                className="bg-red-600 text-white"
+                className="bg-red-600 text-white mb-5"
               >
                 Signin Google
               </Button>
+
+              <Link href="/signup" passHref>
+                <Typography component="a" variant="body1" className="w-full text-center hover:underline" color="primary">
+                  Create a account
+                </Typography>
+              </Link>
             </form>
           </CardContent>
         </Card>

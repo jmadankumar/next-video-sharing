@@ -10,7 +10,7 @@ interface VideoCardProps {
   className: string;
 }
 const VideoCard = React.forwardRef<HTMLDivElement, VideoCardProps>(
-  ({ videoDetail, className,...props }, ref) => {
+  ({ videoDetail, className, ...props }, ref) => {
     return (
       <div className={cx(className)} ref={ref} {...props}>
         <VideoThumbnail src={videoDetail.thumbnailUrl} title={videoDetail.title} />
@@ -19,7 +19,7 @@ const VideoCard = React.forwardRef<HTMLDivElement, VideoCardProps>(
         </Typography>
         <div className="flex justify-between mt-1">
           <Link href={`/channel/${videoDetail.channel.id}`} passHref>
-            <Typography variant="subtitle1" className="text-gray-700">
+            <Typography variant="subtitle1" component="a" className="text-gray-700">
               {videoDetail.channel.name}
             </Typography>
           </Link>

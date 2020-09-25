@@ -1,4 +1,5 @@
 import API from '../helper/api';
+import { SignupFormData } from '../types/form';
 import { UserDTO } from '../types/user';
 
 interface LoginRequest {
@@ -25,9 +26,20 @@ const logout = async (): Promise<LogoutResponse> => {
   return response.data;
 };
 
+interface SignupResponse {
+  message: string;
+}
+const register = async (signupFormData: SignupFormData): Promise<SignupResponse> => {
+  const response = await API.post<SignupResponse>('/auth/register', {
+    data: signupFormData,
+  });
+  return response.data;
+};
+
 const AuthService = {
   login,
   logout,
+  register,
 };
 
 export default AuthService;

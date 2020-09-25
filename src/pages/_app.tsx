@@ -4,10 +4,13 @@ import '../styles/globals.css';
 import 'tailwindcss/dist/tailwind.min.css';
 import { useEffect } from 'react';
 import { wrapperRedux } from '../store';
-
 import LoggedUserService from '../service/logged-user.service';
 import getAuthenticationToken from '../helper/getAuthenticationToken';
 import { setUser } from '../store/auth/actions';
+import {
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -15,8 +18,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (jssStyles && jssStyles.parentNode) jssStyles.parentNode.removeChild(jssStyles);
   }, []);
   return (
+    
     <StylesProvider injectFirst>
+       <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Component {...pageProps} />
+      </MuiPickersUtilsProvider>
     </StylesProvider>
   );
 }

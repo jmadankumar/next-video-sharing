@@ -35,6 +35,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
   const doLogout = async () => {
     setAnchorEl(null);
     try {
+      await AuthService.logout();
       await dispatch(logout());
       router.push('/');
     } catch (error) {
