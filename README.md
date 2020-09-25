@@ -32,3 +32,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 Reference:
 SSR Stylesheet: https://medium.com/swlh/server-side-rendering-styled-components-with-nextjs-1db1353e915e#:~:text=Styled%2Dcomponents%20supports%20concurrent%20SSR,styles%20via%20a%20context%20API.
+
+https://dev.to/justincy/client-side-and-server-side-redirection-in-next-js-3ile

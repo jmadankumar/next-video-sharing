@@ -3,9 +3,11 @@ import { UserDTO } from '../../types/user';
 
 export interface AuthState {
   user: UserDTO | null;
+  authenticated: boolean;
 }
 
 export const SET_USER = '@auth/set-user';
+export const LOGOUT = '@auth/logout';
 
 export interface SetUserAction {
   type: typeof SET_USER;
@@ -14,4 +16,7 @@ export interface SetUserAction {
   };
 }
 
-export type AuthActionTypes = SetUserAction;
+export interface LogoutAction {
+  type: typeof LOGOUT;
+}
+export type AuthActionTypes = SetUserAction | LogoutAction;

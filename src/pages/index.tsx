@@ -11,12 +11,13 @@ import Main from '../components/Layout/Main';
 import { RootState, wrapperRedux } from '../store';
 import { setVideos } from '../store/home/actions';
 import { connect } from 'react-redux';
+import { UserDTO } from '../types/user';
 
 interface HomeProps {
   videos: VideoDTO[];
+  user: UserDTO | null;
 }
-const Home: React.FC<HomeProps> = ({ videos }) => {
-  console.log(videos);
+const Home: React.FC<HomeProps> = ({ videos, ...props }) => {
   return (
     <Layout>
       <Head>
@@ -42,6 +43,7 @@ const Home: React.FC<HomeProps> = ({ videos }) => {
 function mapStateToProps(state: RootState) {
   return {
     videos: state.homeState.videos,
+    user: state.authState.user,
   };
 }
 

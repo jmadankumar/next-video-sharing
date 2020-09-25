@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import AuthService from '../service/auth.service';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import { useRouter } from 'next/router';
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -19,6 +20,7 @@ const LoginWrapper = styled.div`
 `;
 
 const LoginPage = () => {
+  const router = useRouter();
   const [credential, setCredential] = useState({ email: '', password: '' });
   const [openSnack, setOpenSnackbar] = useState(false);
   const [error, setError] = useState('false');
@@ -34,6 +36,7 @@ const LoginPage = () => {
     setError('');
     try {
       await AuthService.login(credential);
+      router.replace('/');
     } catch (error) {
       if (error.response) {
         setOpenSnackbar(true);
@@ -41,9 +44,11 @@ const LoginPage = () => {
       }
     }
   };
+
   const handleClose = () => {
     setOpenSnackbar(false);
   };
+
   return (
     <LoginWrapper>
       <div className="login-container">

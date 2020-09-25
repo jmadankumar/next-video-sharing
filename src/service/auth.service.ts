@@ -16,8 +16,18 @@ const login = async (credentials: LoginRequest): Promise<LoginResponse> => {
   return response.data;
 };
 
+interface LogoutResponse {
+  message: string;
+}
+
+const logout = async (): Promise<LogoutResponse> => {
+  const response = await API.post<LogoutResponse>('/auth/logout');
+  return response.data;
+};
+
 const AuthService = {
   login,
+  logout,
 };
 
 export default AuthService;
