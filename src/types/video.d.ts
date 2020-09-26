@@ -8,7 +8,7 @@ export interface VideoChunkDTO {
 export interface VideoDTO {
   id: string;
   userId: string;
-  channel: { id: string; name: string };
+  channel: { id: string; name: string; imageUrl?: string };
   title: string;
   description: string;
   thumbnailUrl: string;

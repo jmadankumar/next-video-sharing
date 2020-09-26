@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { connect } from 'react-redux';
 import MainLayout from '../components/MainLayout';
+import { redirect } from '../helper/http';
 import VideoService from '../service/video.service';
 import { RootState, wrapperRedux } from '../store';
 import { setWatchVideo } from '../store/watch/actions';
@@ -40,9 +41,16 @@ const mapStateToProps = (state: RootState) => {
 export default connect(mapStateToProps)(WatchPage);
 
 export const getServerSideProps: GetServerSideProps = wrapperRedux.getServerSideProps(
-  async ({ query, store }) => {
+  async ({ query, store, res }) => {
     const { v: id } = query;
-    const video = await VideoService.getVideoById(id as string);
-    await store.dispatch(setWatchVideo(video));
+    if (!id) {
+      redirect(res);
+    }
+    try {
+      const video = await VideoService.getVideoById(id as string);
+      await store.dispatch(setWatchVideo(video));
+    } catch (err) {
+      redirect(res);
+    }
   },
 );

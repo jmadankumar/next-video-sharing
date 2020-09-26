@@ -46,15 +46,15 @@ const Header: React.FC<HeaderProps> = ({}) => {
   return (
     <HeaderWrapper position="fixed" elevation={0} className="border-b border-gray-300">
       <Toolbar className="bg-white">
-        <div className="flex flex-between flex-grow">
+        <div>
           <Link href="/">
             <Typography variant="h5" className="text-black cursor-pointer">
               Next Video
             </Typography>
           </Link>
-          <div className="ml-5">
-            <SearchBar />
-          </div>
+        </div>
+        <div className="flex justify-center flex-grow ml-5 w-6/12">
+          <SearchBar />
         </div>
         {!authenticated && (
           <Link href="/login">
