@@ -16,6 +16,9 @@ import { useRouter } from 'next/dist/client/router';
 import cx from 'classnames';
 import Link from 'next/link';
 import ChannelSubscriptions from '../ChannelSubscriptions';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { SidebarState } from '../../store/sidebar/types';
 
 const menuList: Array<{ title: string; path: string; icon: any }> = [
   {
@@ -46,6 +49,7 @@ interface SideBarProps {
 }
 const SideBar: React.FC<SideBarProps> = ({ floatSideBar }) => {
   const router = useRouter();
+  const { subscriptions } = useSelector<RootState, SidebarState>((state) => state.sidebarState);
   return (
     <SideBarWrapper
       variant={floatSideBar ? 'temporary' : 'permanent'}
@@ -69,7 +73,7 @@ const SideBar: React.FC<SideBarProps> = ({ floatSideBar }) => {
         })}
         <Divider />
       </List>
-      <ChannelSubscriptions />
+      <ChannelSubscriptions subscriptions={subscriptions} />
     </SideBarWrapper>
   );
 };

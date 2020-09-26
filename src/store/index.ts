@@ -7,12 +7,14 @@ import { HomeActionTypes } from './home/types';
 import { AuthActionTypes } from './auth/types';
 import watchReducer from './watch/reducers';
 import searchReducer from './search/reducers';
+import sidebarReducer from './sidebar/reducers';
 
 const combinedReducer = combineReducers({
   authState: authReducer,
   homeState: homeReducer,
   watchState: watchReducer,
   searchState: searchReducer,
+  sidebarState: sidebarReducer,
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;

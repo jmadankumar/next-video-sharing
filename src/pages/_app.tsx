@@ -7,10 +7,9 @@ import { wrapperRedux } from '../store';
 import LoggedUserService from '../service/logged-user.service';
 import getAuthenticationToken from '../helper/getAuthenticationToken';
 import { setUser } from '../store/auth/actions';
-import {
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import { setSubscriptions } from '../store/sidebar/actions';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -18,10 +17,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (jssStyles && jssStyles.parentNode) jssStyles.parentNode.removeChild(jssStyles);
   }, []);
   return (
-    
     <StylesProvider injectFirst>
-       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Component {...pageProps} />
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <Component {...pageProps} />
       </MuiPickersUtilsProvider>
     </StylesProvider>
   );
@@ -33,11 +31,16 @@ MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
     if (req) {
       const authenticationToken = getAuthenticationToken(req);
       if (authenticationToken) {
-        const user = await LoggedUserService.getProfileDetail(authenticationToken);
-        store.dispatch(setUser(user));
+        const { user, subscriptions } = await LoggedUserService.getProfileDetail(
+          authenticationToken,
+        );
+        await store.dispatch(setUser(user));
+        await store.dispatch(setSubscriptions(subscriptions));
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
   return {
     pageProps: { ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {}) },
   };
