@@ -10,6 +10,7 @@ import { setUser } from '../store/auth/actions';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { setSubscriptions } from '../store/sidebar/actions';
+import { SnackbarProvider } from 'notistack';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -19,7 +20,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <StylesProvider injectFirst>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Component {...pageProps} />
+        <SnackbarProvider
+          maxSnack={3}
+          autoHideDuration={5000}
+          anchorOrigin={{
+            horizontal: 'center',
+            vertical: 'top',
+          }}
+        >
+          <Component {...pageProps} />
+        </SnackbarProvider>
       </MuiPickersUtilsProvider>
     </StylesProvider>
   );

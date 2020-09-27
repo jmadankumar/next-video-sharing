@@ -1,3 +1,5 @@
+import { VideoDTO } from './video';
+
 export interface ChannelDTO {
   id: string;
   name: string;
@@ -7,4 +9,7 @@ export interface ChannelDTO {
   createdBy: string;
   updatedBy: string;
   ownerId: string;
+  videos?: VideoDTO[];
+  totalVideo?: number;
+  subscribers?: number;
 }

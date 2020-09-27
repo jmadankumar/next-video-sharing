@@ -8,6 +8,8 @@ import { AuthActionTypes } from './auth/types';
 import watchReducer from './watch/reducers';
 import searchReducer from './search/reducers';
 import sidebarReducer from './sidebar/reducers';
+import feedReducer from './feed/reducer';
+import channelReducer from './channel/reducers';
 
 const combinedReducer = combineReducers({
   authState: authReducer,
@@ -15,6 +17,8 @@ const combinedReducer = combineReducers({
   watchState: watchReducer,
   searchState: searchReducer,
   sidebarState: sidebarReducer,
+  feedState: feedReducer,
+  channelState: channelReducer,
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;

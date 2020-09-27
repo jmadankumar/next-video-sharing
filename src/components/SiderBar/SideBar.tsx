@@ -19,6 +19,7 @@ import ChannelSubscriptions from '../ChannelSubscriptions';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { SidebarState } from '../../store/sidebar/types';
+import FeedMenuList from '../FeedMenuList/FeedMenuList';
 
 const menuList: Array<{ title: string; path: string; icon: any }> = [
   {
@@ -71,8 +72,10 @@ const SideBar: React.FC<SideBarProps> = ({ floatSideBar }) => {
             </Link>
           );
         })}
-        <Divider />
       </List>
+      <Divider />
+      <FeedMenuList />
+      <Divider />
       <ChannelSubscriptions subscriptions={subscriptions} />
     </SideBarWrapper>
   );

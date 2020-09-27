@@ -13,7 +13,7 @@ import { ChannelDTO } from '../../types/channel';
 
 const ChannelSubscriptionsWrapper = styled.div`
   .list-item-avatar {
-    min-width: 36px;
+    // min-width: 36px;
   }
 `;
 
@@ -21,8 +21,11 @@ interface ChannelSubscriptionsProps {
   subscriptions: ChannelDTO[];
 }
 const ChannelSubscriptions: React.FC<ChannelSubscriptionsProps> = ({ subscriptions }) => {
+  if (subscriptions.length === 0) {
+    return null;
+  }
   return (
-    <ChannelSubscriptionsWrapper>
+    <ChannelSubscriptionsWrapper className="py-2">
       <Typography variant="body1" className="px-4 py-1 uppercase font-bold" color="textSecondary">
         Subscriptions
       </Typography>
