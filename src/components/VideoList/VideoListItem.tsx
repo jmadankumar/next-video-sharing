@@ -8,6 +8,7 @@ import { VideoDTO } from '../../types/video';
 const VideoListItemWrapper = styled.a`
   width: 100%;
   margin-bottom: 20px;
+  display:block;
 
   .video-image {
     width: 300px;
@@ -21,7 +22,7 @@ interface VideoListItemProps {
 const VideoListItem: React.FC<VideoListItemProps> = ({ video }) => {
   return (
     <Link href={`/watch?v=${video.id}`} passHref>
-      <VideoListItemWrapper>
+      <VideoListItemWrapper className="mb-5">
         <Card className="w-full">
           <div className="flex flex-row ">
             <CardMedia image={video.thumbnailUrl} className="video-image" />

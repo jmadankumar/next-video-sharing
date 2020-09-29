@@ -1,7 +1,8 @@
 import { ServerResponse } from 'http';
 
-export function redirect(res: ServerResponse, location: string = '/') {
-  res.statusCode = 302;
-  res.setHeader('Location', location);
-  res.end();
+export function redirect(res: ServerResponse | undefined, location: string = '/') {
+  if (res) {
+    res.writeHead(302, { Location: location });
+    res.end();
+  }
 }

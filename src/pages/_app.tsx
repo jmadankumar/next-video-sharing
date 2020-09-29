@@ -11,31 +11,35 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { setSubscriptions } from '../store/sidebar/actions';
 import { SnackbarProvider } from 'notistack';
+import { LocalMessage } from '../@types';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  useEffect(() => {
+class MyApp extends App<AppProps> {
+  componentDidMount() {
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles && jssStyles.parentNode) jssStyles.parentNode.removeChild(jssStyles);
-  }, []);
-  return (
-    <StylesProvider injectFirst>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <SnackbarProvider
-          maxSnack={3}
-          autoHideDuration={5000}
-          anchorOrigin={{
-            horizontal: 'center',
-            vertical: 'top',
-          }}
-        >
-          <Component {...pageProps} />
-        </SnackbarProvider>
-      </MuiPickersUtilsProvider>
-    </StylesProvider>
-  );
+  }
+  render() {
+    const { Component, pageProps } = this.props;
+    return (
+      <StylesProvider injectFirst>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <SnackbarProvider
+            maxSnack={3}
+            autoHideDuration={5000}
+            anchorOrigin={{
+              horizontal: 'center',
+              vertical: 'top',
+            }}
+          >
+            <Component {...pageProps} />
+          </SnackbarProvider>
+        </MuiPickersUtilsProvider>
+      </StylesProvider>
+    );
+  }
 }
 
-MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
+MyApp.getInitialProps = async ({ Component, ctx }) => {
   const { req, store } = ctx;
   try {
     if (req) {
@@ -46,6 +50,10 @@ MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
         );
         await store.dispatch(setUser(user));
         await store.dispatch(setSubscriptions(subscriptions));
+
+        const request = (req as unknown) as LocalMessage;
+        request.locals = {};
+        request.locals.authenticated = true;
       }
     }
   } catch (error) {

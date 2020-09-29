@@ -29,16 +29,20 @@ interface GetMyChannelResponse {
 const getMyChannel = async (token?: string): Promise<GetMyChannelResult> => {
   const result: GetMyChannelResult = {};
   try {
+    const headers: { [key: string]: any } = {};
+    if (token) {
+      headers['x-authentication-token'] = token;
+    }
+
     const {
       data: { channel },
     } = await API.get<GetMyChannelResponse>(`/me/channel`, {
-      headers: {
-        'x-authentication-token': token,
-      },
+      headers,
     });
     result.channel = channel;
   } catch (error) {
     result.error = getErrorMessage(error);
+    console.log(result);
   }
   return result;
 };

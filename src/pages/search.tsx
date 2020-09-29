@@ -57,7 +57,7 @@ const Search: React.FC<SearchProps> = ({ results }) => {
       </Head>
       <div className="w-full h-full md:w-3/4 md:m-auto">
         <div className="mb-5">{renderChannelResult()}</div>
-        <Divider className="mb-5" />
+        {results.channels?.length > 0 && <Divider className="mb-5" />}
         <div className="mb-5">{renderVideoResult()}</div>
       </div>
     </MainLayout>

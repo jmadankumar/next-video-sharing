@@ -6,13 +6,10 @@ import styled from 'styled-components';
 import VideoCard from '../../components/VideoCard';
 import ChannelService from '../../service/channel.service';
 import { ChannelDTO } from '../../types/channel';
+import ChannelCoverImage from './ChannelCoverImage';
 
 const ChannelViewWrapper = styled.div`
   .channel-cover-image {
-    height: 300px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
   }
   .channel-image {
     width: 80px;
@@ -44,45 +41,74 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channel, isOwnChannel }) => {
   };
 
   return (
-    <ChannelViewWrapper className="flex flex-col">
-      <div
-        className="channel-cover-image"
-        style={{
-          backgroundImage: `url(${channel.coverImageUrl})`,
-        }}
-      ></div>
-      <div className="channel-info flex flex-row p-6 bg-white">
-        <Avatar src={channel.imageUrl} className="channel-image" />
-        <div className="flex flex-grow flex-col justify-center pl-8">
-          <Typography variant="h5">{channel.name}</Typography>
-          <Typography variant="subtitle2" color="textSecondary">
-            {channel.subscribers || 0} subscribers
-          </Typography>
-        </div>
-        {!isOwnChannel && (
-          <div className="flex items-center p-4">
-            <Button
-              color="secondary"
-              variant="contained"
-              disableElevation
-              onClick={subscribe(channel.id)}
-            >
-              Subscribe
-            </Button>
-          </div>
-        )}
-      </div>
-      <div className="channel-videos">
-        <Paper square>
-          <Tabs value={0} indicatorColor="primary" textColor="primary">
-            <Tab label="Videos" />
-          </Tabs>
-        </Paper>
+    <ChannelViewWrapper className="flex flex-col -m-6">
+      <ChannelCoverImage src={channel.coverImageUrl || ''} />
+      <div className="channel-info bg-white border-b border-gray-200">
+        <div className="channel-info-container flex flex-row p-6  w-3/4 m-auto">
+          <Avatar src={channel.imageUrl} className="channel-image" />
+          <div className="flex flex-grow flex-col justify-center pl-8">
+            <Typography variant="h5">{channel.name}</Typography>
+            <div className="mb-2">
+              <Typography
+                variant="subtitle2"
+                color="textSecondary"
+                component="span"
+                className="mr-3"
+              >
+                {channel.subscribers || 0} subscribers
+              </Typography>
+              <Typography variant="subtitle2" color="textSecondary" component="span">
+                {channel.totalVideo || 0} videos
+              </Typography>
+            </div>
 
-        <div className="flex flex-wrap p-8">
+            {isOwnChannel && (
+              <div>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  disableElevation
+                  onClick={subscribe(channel.id)}
+                  size="small"
+                  className="mr-3"
+                >
+                  Cutomize channel
+                </Button>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  disableElevation
+                  onClick={subscribe(channel.id)}
+                  size="small"
+                >
+                  Upload Video
+                </Button>
+              </div>
+            )}
+          </div>
+          {!isOwnChannel && (
+            <div className="flex items-center p-4">
+              <Button
+                color="secondary"
+                variant="contained"
+                disableElevation
+                onClick={subscribe(channel.id)}
+              >
+                Subscribe
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="channel-videos w-3/4 m-auto">
+        <Tabs value={0} indicatorColor="primary" textColor="primary" className="bg-white">
+          <Tab label="Videos" />
+        </Tabs>
+
+        <div className="flex flex-wrap -mx-2 py-6">
           {channel?.videos &&
             channel.videos.map((video) => (
-              <div className="xs:w-full sm:w-1/3 md:w-1/4 lg:w-1/4 xl:w-1/6 px-3" key={video.id}>
+              <div className="xs:w-full sm:w-1/3 md:w-1/4 lg:w-1/4 xl:w-1/4 mx-4" key={video.id}>
                 <Link href={`/watch?v=${video.id}`} passHref>
                   <a>
                     <VideoCard videoDetail={video} className="cursor-pointer mb-8" />

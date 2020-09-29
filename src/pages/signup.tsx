@@ -20,6 +20,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { SignupFormData } from '../types/form';
+import withoutAuth from '../hocs/withoutAuth';
 
 const SignupWrapper = styled.div`
   display: flex;
@@ -205,4 +206,4 @@ const Signup: React.FC = () => {
   );
 };
 
-export default Signup;
+export default withoutAuth(Signup, '/');

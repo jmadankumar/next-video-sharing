@@ -31,7 +31,7 @@ const ChannelSubscriptions: React.FC<ChannelSubscriptionsProps> = ({ subscriptio
       </Typography>
       <List>
         {subscriptions.map((subscription) => (
-          <Link href={`/channel/${subscription.id}`} passHref>
+          <Link href={`/channel/${subscription.id}`} passHref key={subscription.id}>
             <ListItem component="a">
               <ListItemAvatar className="list-item-avatar">
                 <Avatar src={subscription.imageUrl} alt={subscription.name} className="w-6 h-6" />

@@ -1,7 +1,7 @@
 import { IncomingMessage } from 'http';
 import cookie from 'cookie';
 
-const getAuthenticationToken = (req: IncomingMessage) => {
+const getAuthenticationToken = (req?: IncomingMessage) => {
   let authenticationToken = '';
   if (req?.headers.cookie) {
     const cookies = cookie.parse(req.headers.cookie);

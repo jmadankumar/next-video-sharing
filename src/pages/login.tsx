@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import withoutAuth from '../hocs/withoutAuth';
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -136,4 +137,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default withoutAuth(LoginPage, '/');
