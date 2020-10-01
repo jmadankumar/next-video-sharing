@@ -1,10 +1,12 @@
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import Head from 'next/head';
 import MainLayout from '../../components/MainLayout';
 import withAuth from '../../hocs/withAuth';
 import { RootState } from '../../store';
+import { FeedState } from '../../store/feed/types';
 
 const History = () => {
+  const { channel } = useSelector<RootState, FeedState>((state) => state.feedState);
   return (
     <MainLayout>
       <Head>
@@ -14,12 +16,4 @@ const History = () => {
   );
 };
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    channel: state.feedState.channel,
-  };
-};
-
-const ConnectedHistory = connect(mapStateToProps)(History);
-
-export default withAuth(ConnectedHistory, '/login');
+export default withAuth(History, '/login');

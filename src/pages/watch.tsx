@@ -1,22 +1,20 @@
-import { GetServerSideProps } from 'next';
+import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import MainLayout from '../components/MainLayout';
-import { redirect } from '../helper/http';
+import { redirect } from '../helper/route';
 import VideoService from '../service/video.service';
-import { RootState, wrapperRedux } from '../store';
+import { RootState } from '../store';
 import { setWatchVideo } from '../store/watch/actions';
-import { VideoDTO } from '../types/video';
+import { WatchState } from '../store/watch/types';
 
 const DynamicVideoPlayer = dynamic(() => import('../components/VideoPlayer/VideoPlayer'), {
   ssr: false,
 });
-interface WatchPageProps {
-  video: VideoDTO | null;
-}
 
-const WatchPage: React.FC<WatchPageProps> = ({ video }) => {
+const WatchPage: NextPage = () => {
+  const { video } = useSelector<RootState, WatchState>((state) => state.watchState);
   return (
     <MainLayout floatSideBar>
       <Head>
@@ -32,25 +30,17 @@ const WatchPage: React.FC<WatchPageProps> = ({ video }) => {
   );
 };
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    video: state.watchState.video,
-  };
+WatchPage.getInitialProps = async ({ store, res, query }) => {
+  const { v: id } = query;
+  if (!id) {
+    redirect(res);
+  }
+  try {
+    const video = await VideoService.getVideoById(id as string);
+    await store.dispatch(setWatchVideo(video));
+  } catch (err) {
+    redirect(res);
+  }
 };
 
-export default connect(mapStateToProps)(WatchPage);
-
-export const getServerSideProps: GetServerSideProps = wrapperRedux.getServerSideProps(
-  async ({ query, store, res }) => {
-    const { v: id } = query;
-    if (!id) {
-      redirect(res);
-    }
-    try {
-      const video = await VideoService.getVideoById(id as string);
-      await store.dispatch(setWatchVideo(video));
-    } catch (err) {
-      redirect(res);
-    }
-  },
-);
+export default WatchPage;

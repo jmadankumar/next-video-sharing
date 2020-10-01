@@ -5,7 +5,6 @@ import { UserDTO } from '../types/user';
 
 interface GetProfileDetailResponse {
   user: UserDTO;
-  subscriptions: ChannelDTO[];
 }
 
 const getProfileDetail = async (token?: string): Promise<GetProfileDetailResponse> => {

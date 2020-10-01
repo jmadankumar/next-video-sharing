@@ -1,26 +1,26 @@
 import { Divider, Typography } from '@material-ui/core';
-import { GetServerSideProps } from 'next';
+import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import ChannelList from '../components/ChannelList';
 import MainLayout from '../components/MainLayout';
 import VideoList from '../components/VideoList';
+import { redirect } from '../helper/route';
 import SearchService from '../service/search.service';
-import { RootState, wrapperRedux } from '../store';
+import { RootState } from '../store';
 import { setResults } from '../store/search/actions';
-import { SearchResult } from '../types/search';
+import { SearchState } from '../store/search/types';
 
-const SearchContent = styled.div``;
-interface SearchProps {
-  results: SearchResult;
-}
-const Search: React.FC<SearchProps> = ({ results }) => {
+
+const Search: NextPage = () => {
   const router = useRouter();
   const {
     query: { query },
   } = router;
+
+  const { results } = useSelector<RootState, SearchState>((state) => state.searchState);
 
   const renderChannelResult = () => {
     if (results.channels?.length > 0) {
@@ -64,27 +64,17 @@ const Search: React.FC<SearchProps> = ({ results }) => {
   );
 };
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    results: state.searchState.results,
-  };
+Search.getInitialProps = async ({ store, res, query }) => {
+  const { query: searchQuery, p = 1, s = 10 } = query;
+  if (!searchQuery) {
+    redirect(res);
+  }
+  const results = await SearchService.getSearchResult({
+    query: searchQuery as string,
+    page: parseInt(p as string),
+    size: parseInt(s as string),
+  });
+  await store.dispatch(setResults(results));
 };
 
-export default connect(mapStateToProps)(Search);
-
-export const getServerSideProps: GetServerSideProps = wrapperRedux.getServerSideProps(
-  async ({ query, store, res }) => {
-    const { query: searchQuery, p = 1, s = 10 } = query;
-    if (!searchQuery) {
-      res.statusCode = 302;
-      res.setHeader('Location', '/');
-      res.end();
-    }
-    const results = await SearchService.getSearchResult({
-      query: searchQuery as string,
-      page: parseInt(p as string),
-      size: parseInt(s as string),
-    });
-    await store.dispatch(setResults(results));
-  },
-);
+export default Search;

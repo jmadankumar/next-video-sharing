@@ -45,12 +45,11 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     if (req) {
       const authenticationToken = getAuthenticationToken(req);
       if (authenticationToken) {
-        const { user, subscriptions } = await LoggedUserService.getProfileDetail(
+        const { user } = await LoggedUserService.getProfileDetail(
           authenticationToken,
         );
         await store.dispatch(setUser(user));
-        await store.dispatch(setSubscriptions(subscriptions));
-
+      
         const request = (req as unknown) as LocalMessage;
         request.locals = {};
         request.locals.authenticated = true;

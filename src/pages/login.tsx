@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  Card,
-  CardContent,
-  Snackbar,
-  TextField,
-  Typography,
-} from '@material-ui/core';
+import { Button, Card, CardContent, Snackbar, TextField, Typography } from '@material-ui/core';
 import { useState } from 'react';
 import styled from 'styled-components';
 import AuthService from '../service/auth.service';
@@ -15,6 +8,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import withoutAuth from '../hocs/withoutAuth';
+import { setUser } from '../store/auth/actions';
+import { useDispatch } from 'react-redux';
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -30,6 +25,7 @@ const LoginWrapper = styled.div`
 
 const LoginPage = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [credential, setCredential] = useState({ email: '', password: '' });
   const [openSnack, setOpenSnackbar] = useState(false);
   const [error, setError] = useState('false');
@@ -43,14 +39,14 @@ const LoginPage = () => {
     event.preventDefault();
     setOpenSnackbar(false);
     setError('');
-    try {
-      await AuthService.login(credential);
+    const { user, error } = await AuthService.login(credential);
+
+    if (error) {
+      setOpenSnackbar(true);
+      setError(error);
+    } else if (user) {
+      await dispatch(setUser(user));
       router.replace('/');
-    } catch (error) {
-      if (error.response) {
-        setOpenSnackbar(true);
-        setError(error.response.data.message);
-      }
     }
   };
 
@@ -108,7 +104,12 @@ const LoginPage = () => {
               </Button>
 
               <Link href="/signup" passHref>
-                <Typography component="a" variant="body1" className="w-full text-center hover:underline" color="primary">
+                <Typography
+                  component="a"
+                  variant="body1"
+                  className="w-full text-center hover:underline"
+                  color="primary"
+                >
                   Create a account
                 </Typography>
               </Link>

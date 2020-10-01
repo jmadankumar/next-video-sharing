@@ -1,13 +1,9 @@
 import {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  NextComponentType,
   NextPage,
   NextPageContext,
 } from 'next';
 import { useRouter } from 'next/router';
-import { ComponentType } from 'react';
-import { redirect } from '../helper/http';
+import { redirect } from '../helper/route';
 
 function isBrowser() {
   return typeof window !== 'undefined';

@@ -18,9 +18,9 @@ const ChannelSubscriptionsWrapper = styled.div`
 `;
 
 interface ChannelSubscriptionsProps {
-  subscriptions: ChannelDTO[];
+  subscriptions?: ChannelDTO[];
 }
-const ChannelSubscriptions: React.FC<ChannelSubscriptionsProps> = ({ subscriptions }) => {
+const ChannelSubscriptions: React.FC<ChannelSubscriptionsProps> = ({ subscriptions = [] }) => {
   if (subscriptions.length === 0) {
     return null;
   }

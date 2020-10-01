@@ -1,4 +1,5 @@
 import API from '../helper/api';
+import { getErrorMessage } from '../helper/axios';
 import { SignupFormData } from '../types/form';
 import { UserDTO } from '../types/user';
 
@@ -12,9 +13,20 @@ interface LoginResponse {
   user: UserDTO;
   token: string;
 }
-const login = async (credentials: LoginRequest): Promise<LoginResponse> => {
-  const response = await API.post<LoginResponse>('/auth/login', credentials);
-  return response.data;
+
+interface LoginResult {
+  user?: UserDTO;
+  error?: any;
+}
+const login = async (credentials: LoginRequest): Promise<LoginResult> => {
+  const result: LoginResult = {};
+  try {
+    const response = await API.post<LoginResponse>('/auth/login', credentials);
+    result.user = response.data.user;
+  } catch (error) {
+    result.error = getErrorMessage(error);
+  }
+  return result;
 };
 
 interface LogoutResponse {

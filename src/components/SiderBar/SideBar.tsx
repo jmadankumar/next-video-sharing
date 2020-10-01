@@ -51,7 +51,7 @@ interface SideBarProps {
 }
 const SideBar: React.FC<SideBarProps> = ({ floatSideBar }) => {
   const router = useRouter();
-  const { subscriptions } = useSelector<RootState, SidebarState>((state) => state.sidebarState);
+  const { user } = useSelector<RootState, AuthState>((state) => state.authState);
   const { authenticated } = useSelector<RootState, AuthState>((state) => state.authState);
   return (
     <SideBarWrapper
@@ -80,7 +80,7 @@ const SideBar: React.FC<SideBarProps> = ({ floatSideBar }) => {
         <>
           <FeedMenuList />
           <Divider />
-          <ChannelSubscriptions subscriptions={subscriptions} />
+          <ChannelSubscriptions subscriptions={user?.subscriptions} />
         </>
       )}
     </SideBarWrapper>

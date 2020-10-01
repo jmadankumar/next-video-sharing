@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import VideoCard from '../components/VideoCard';
@@ -10,14 +10,14 @@ import SideBar from '../components/SiderBar';
 import Main from '../components/Layout/Main';
 import { RootState, wrapperRedux } from '../store';
 import { setVideos } from '../store/home/actions';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { UserDTO } from '../types/user';
 
-interface HomeProps {
-  videos: VideoDTO[];
-  user: UserDTO | null;
-}
-const Home: React.FC<HomeProps> = ({ videos, ...props }) => {
+const Home: NextPage = () => {
+  const {
+    authState: { user },
+    homeState: { videos },
+  } = useSelector<RootState, RootState>((state) => state);
   return (
     <Layout>
       <Head>
@@ -42,18 +42,9 @@ const Home: React.FC<HomeProps> = ({ videos, ...props }) => {
   );
 };
 
-function mapStateToProps(state: RootState) {
-  return {
-    videos: state.homeState.videos,
-    user: state.authState.user,
-  };
-}
+Home.getInitialProps = async ({ store }) => {
+  const videos = await VideoService.getAllVideo();
+  await store.dispatch(setVideos(videos));
+};
 
-export default connect(mapStateToProps)(Home);
-
-export const getServerSideProps: GetServerSideProps = wrapperRedux.getServerSideProps(
-  async ({ store }) => {
-    const videos = await VideoService.getAllVideo();
-    await store.dispatch(setVideos(videos));
-  },
-);
+export default Home;
