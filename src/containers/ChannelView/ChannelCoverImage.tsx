@@ -1,11 +1,8 @@
 import styled from 'styled-components';
+import BackgroundImage from '../../components/common/BackgroundImage';
 
-const ChannelCoverImage = styled.div<{ src: string }>`
+const ChannelCoverImage = styled(BackgroundImage)<{ src: string }>`
   height: 300px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  background-image: url(${(props) => props.src});
 `;
 
 export default ChannelCoverImage;

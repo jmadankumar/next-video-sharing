@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Button, Paper, Tab, Tabs, Typography } from '@material-ui/core';
+import { Avatar, Button, Tab, Tabs, Typography } from '@material-ui/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
@@ -64,25 +64,29 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channel, isOwnChannel }) => {
 
             {isOwnChannel && (
               <div>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  disableElevation
-                  onClick={subscribe(channel.id)}
-                  size="small"
-                  className="mr-3"
-                >
-                  Cutomize channel
-                </Button>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  disableElevation
-                  onClick={subscribe(channel.id)}
-                  size="small"
-                >
-                  Upload Video
-                </Button>
+                <Link href={`/feed/my_videos/customize`} passHref>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    disableElevation
+                    size="small"
+                    className="mr-3"
+                    component="a"
+                  >
+                    Cutomize channel
+                  </Button>
+                </Link>
+                <Link href={`/feed/my_videos/upload`} passHref>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    disableElevation
+                    size="small"
+                    component="a"
+                  >
+                    Upload Video
+                  </Button>
+                </Link>
               </div>
             )}
           </div>

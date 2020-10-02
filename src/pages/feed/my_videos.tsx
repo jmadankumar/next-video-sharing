@@ -1,18 +1,15 @@
-import { Dialog } from '@material-ui/core';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import MainLayout from '../../components/MainLayout';
 import getAuthenticationToken from '../../helper/getAuthenticationToken';
-import { redirect } from '../../helper/http';
+import { redirect } from '../../helper/route';
 import withAuth from '../../hocs/withAuth';
 import LoggedUserService from '../../service/logged-user.service';
-import { RootState, wrapperRedux } from '../../store';
+import { RootState } from '../../store';
 import { setFeedChannel } from '../../store/feed/actions';
 import { FeedState } from '../../store/feed/types';
-import { ChannelDTO } from '../../types/channel';
 
 const ChannelView = dynamic(() => import('../../containers/ChannelView'), { ssr: false });
 
@@ -22,8 +19,6 @@ const MyVideos: NextPage = () => {
     <MainLayout>
       <Head>{/* <title>{channel?.name}</title> */}</Head>
       {channel && <ChannelView channel={channel} isOwnChannel />}
-      {/* <Dialog open={openCustomizeDialog}></Dialog>
-      <Dialog open={openVideoUploadDialog}></Dialog> */}
     </MainLayout>
   );
 };
